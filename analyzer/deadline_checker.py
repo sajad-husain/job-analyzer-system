@@ -53,4 +53,4 @@ class DeadlineChecker:
         # Ensure config directory exists
         os.makedirs('config', exist_ok=True)
         with open('config/calendar.json', 'w') as f:
-            json.dump(self.existing_commitments, f)
+            json.dump(self.existing_commitments, f, indent=2)
