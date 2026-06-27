@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from typing import Dict, List
 import json
+import os
 
 class DeadlineChecker:
     def __init__(self):
@@ -48,5 +49,8 @@ class DeadlineChecker:
     
     def _save_calendar(self):
         """Persist calendar data"""
+        import os
+        # Ensure config directory exists
+        os.makedirs('config', exist_ok=True)
         with open('config/calendar.json', 'w') as f:
             json.dump(self.existing_commitments, f)
