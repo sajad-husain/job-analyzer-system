@@ -64,14 +64,14 @@ An automated job monitoring and notification system that scrapes job listings ev
 
 ### `scheduler/job_scheduler.py` — 30-Second Job Monitor
 
-Key class: `JobMonitorScheduler`
+Key class: `JobMonitorScheduler`.venv\Scripts\activate
 
-| Method | Purpose |
-|--------|---------|
-| `__init__` | Creates `AsyncIOScheduler`, `DashboardScraper`, `DeadlineChecker`, `TelegramNotifier`, and an empty `processed_jobs` set |
-| `monitor_jobs()` | Core cycle: scrape → filter (by ID, deadline conflict, pay rate) → notify |
-| `get_min_pay_threshold()` | Returns `25.0` (hardcoded minimum $/hour) |
-| `start()` | Adds the interval job (30s), starts scheduler, triggers an immediate first run |
+| Method                    | Purpose                                                                                                                  |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `__init__`                | Creates `AsyncIOScheduler`, `DashboardScraper`, `DeadlineChecker`, `TelegramNotifier`, and an empty `processed_jobs` set |
+| `monitor_jobs()`          | Core cycle: scrape → filter (by ID, deadline conflict, pay rate) → notify                                                |
+| `get_min_pay_threshold()` | Returns `25.0` (hardcoded minimum $/hour)                                                                                |
+| `start()`                 | Adds the interval job (30s), starts scheduler, triggers an immediate first run                                           |
 
 **Debug tip:** `processed_jobs` is an in-memory `set()`. If the process restarts, all previously seen jobs are re-evaluated.
 
@@ -83,12 +83,12 @@ Key class: `JobMonitorScheduler`
 
 ### `analyzer/deadline_checker.py` — Deadline Conflict Detection
 
-| Component | Detail |
-|-----------|--------|
-| `_load_calendar()` | Returns hardcoded calendar with 3 entries (July 2026) |
-| `has_conflict(deadline)` | Returns `True` if new deadline is within **< 2 days** of existing commitment |
-| `add_commitment(date, desc)` | Adds entry and persists to `config/calendar.json` |
-| `_save_calendar()` | Writes to `config/calendar.json` (directory does **not** exist yet) |
+| Component                    | Detail                                                                       |
+| ---------------------------- | ---------------------------------------------------------------------------- |
+| `_load_calendar()`           | Returns hardcoded calendar with 3 entries (July 2026)                        |
+| `has_conflict(deadline)`     | Returns `True` if new deadline is within **< 2 days** of existing commitment |
+| `add_commitment(date, desc)` | Adds entry and persists to `config/calendar.json`                            |
+| `_save_calendar()`           | Writes to `config/calendar.json` (directory does **not** exist yet)          |
 
 **Note:** The `config/` directory and `config/calendar.json` are referenced but **do not exist**. The system will crash on `_save_calendar()` if `add_commitment()` is called.
 
@@ -100,30 +100,30 @@ Key class: `JobMonitorScheduler`
 
 ### `.env` — Environment Variables
 
-| Variable | Purpose | Default Value |
-|----------|---------|---------------|
-| `TELEGRAM_BOT_TOKEN` | Bot token for Telegram API | `your_bot_token_here` |
-| `TELEGRAM_CHAT_ID` | Target chat/channel ID | `your_chat_id_here` |
-| `EDITGPT_API_KEY` | (Planned) AI editing API key | `your_editgpt_api_key` |
-| `DASHBOARD_USERNAME` | (Planned) Dashboard auth | `your_username` |
-| `DASHBOARD_PASSWORD` | (Planned) Dashboard auth | `your_password` |
+| Variable             | Purpose                      | Default Value                   |
+| -------------------- | ---------------------------- | ------------------------------- |
+| `TELEGRAM_BOT_TOKEN` | Bot token for Telegram API   | `your_bot_token_here`           |
+| `TELEGRAM_CHAT_ID`   | Target chat/channel ID       | `your_chat_id_here`             |
+| `EDITGPT_API_KEY`    | (Planned) AI editing API key | `your_editgpt_api_key`          |
+| `DASHBOARD_USERNAME` | (Planned) Dashboard auth     | `your_username`                 |
+| `DASHBOARD_PASSWORD` | (Planned) Dashboard auth     | `your_password`                 |
 | `WORD_TEMPLATE_PATH` | (Planned) Word template path | `./templates/job_template.docm` |
 
 ### `requirements.txt` — Dependencies
 
-| Package | Version | Used By |
-|---------|---------|---------|
-| `requests` | >=2.31.0 | (planned HTTP) |
-| `beautifulsoup4` | >=4.12.0 | `dashboard_scraper.py` |
-| `selenium` | >=4.15.0 | (planned JS-heavy scraping) |
-| `pyopenvba` | >=0.1.0 | (planned Word VBA) |
-| `python-dotenv` | >=1.0.0 | `telegram_bot.py` |
-| `sqlalchemy` | >=2.0.0 | (planned DB persistence) |
-| `apscheduler` | >=3.10.0 | `job_scheduler.py` |
-| `python-telegram-bot` | >=20.0 | `telegram_bot.py` |
-| `pandas` | >=2.0.0 | (planned data analysis) |
-| `pyyaml` | >=6.0 | (planned YAML config) |
-| `aspose-words` | >=23.0.0 | (planned Word processing) |
+| Package               | Version  | Used By                     |
+| --------------------- | -------- | --------------------------- |
+| `requests`            | >=2.31.0 | (planned HTTP)              |
+| `beautifulsoup4`      | >=4.12.0 | `dashboard_scraper.py`      |
+| `selenium`            | >=4.15.0 | (planned JS-heavy scraping) |
+| `pyopenvba`           | >=0.1.0  | (planned Word VBA)          |
+| `python-dotenv`       | >=1.0.0  | `telegram_bot.py`           |
+| `sqlalchemy`          | >=2.0.0  | (planned DB persistence)    |
+| `apscheduler`         | >=3.10.0 | `job_scheduler.py`          |
+| `python-telegram-bot` | >=20.0   | `telegram_bot.py`           |
+| `pandas`              | >=2.0.0  | (planned data analysis)     |
+| `pyyaml`              | >=6.0    | (planned YAML config)       |
+| `aspose-words`        | >=23.0.0 | (planned Word processing)   |
 
 ---
 
@@ -188,29 +188,33 @@ python main.py
 
 From `main.py` (lines 8-15):
 
-| Handler | Output | Level |
-|---------|--------|-------|
-| `FileHandler` | `logs/system.log` | INFO |
-| `StreamHandler` | stdout (console) | INFO |
+| Handler         | Output            | Level |
+| --------------- | ----------------- | ----- |
+| `FileHandler`   | `logs/system.log` | INFO  |
+| `StreamHandler` | stdout (console)  | INFO  |
 
 ### Debugging Tips
 
 1. **Run with debug logging** (edit `main.py` line 9):
+
    ```python
    level=logging.DEBUG
    ```
 
 2. **Check the log file** after a run:
+
    ```powershell
    Get-Content logs/system.log -Tail 50
    ```
 
 3. **Test the Telegram integration in isolation:**
+
    ```powershell
    python -c "import asyncio; from notifications.telegram_bot import TelegramNotifier; asyncio.run(TelegramNotifier().send_alerts([{'title':'Test','company':'TestCo','pay_rate':30,'word_count':100,'deadline':'2026-07-20'}]))"
    ```
 
 4. **Test the deadline checker in isolation:**
+
    ```powershell
    python -c "from analyzer.deadline_checker import DeadlineChecker; dc=DeadlineChecker(); print(dc.has_conflict('2026-07-11'))"
    ```
@@ -275,11 +279,11 @@ mkdir logs
 
 **Causes and checks:**
 
-| Symptom | Check |
-|---------|-------|
-| `⚠️ Telegram not configured` printed | `.env` file missing or `TELEGRAM_BOT_TOKEN` not set |
-| `Failed to send notification: ...` | Invalid token, wrong chat_id, or no network |
-| No output | Ensure `.env` is in the **same directory** as `telegram_bot.py` (it calls `load_dotenv()` with no path, so it searches CWD). **Run `python main.py` from the `job-analyzer-system/` directory.** |
+| Symptom                              | Check                                                                                                                                                                                            |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `⚠️ Telegram not configured` printed | `.env` file missing or `TELEGRAM_BOT_TOKEN` not set                                                                                                                                              |
+| `Failed to send notification: ...`   | Invalid token, wrong chat_id, or no network                                                                                                                                                      |
+| No output                            | Ensure `.env` is in the **same directory** as `telegram_bot.py` (it calls `load_dotenv()` with no path, so it searches CWD). **Run `python main.py` from the `job-analyzer-system/` directory.** |
 
 ### 6. `ImportError: No module named 'apscheduler'`
 
@@ -315,18 +319,18 @@ WORD_TEMPLATE_PATH=./templates/job_template.docm
 
 These are imported in `main.py` but **not yet implemented**:
 
-| Module Path | Referenced Class | Status |
-|---|---|---|
+| Module Path                        | Referenced Class   | Status            |
+| ---------------------------------- | ------------------ | ----------------- |
 | `word_automation/macro_handler.py` | `WordMacroHandler` | ❌ Does not exist |
-| `ai_integration/editgpt_client.py` | `EditGPTClient` | ❌ Does not exist |
+| `ai_integration/editgpt_client.py` | `EditGPTClient`    | ❌ Does not exist |
 
 These directories are referenced but **do not exist**:
 
-| Path | Referenced In | Purpose |
-|------|---------------|---------|
-| `logs/` | `main.py:12` | Log file output |
-| `config/` | `deadline_checker.py:51` | Calendar persistence |
-| `templates/` | `.env` | Word template storage |
+| Path         | Referenced In            | Purpose               |
+| ------------ | ------------------------ | --------------------- |
+| `logs/`      | `main.py:12`             | Log file output       |
+| `config/`    | `deadline_checker.py:51` | Calendar persistence  |
+| `templates/` | `.env`                   | Word template storage |
 
 ---
 
